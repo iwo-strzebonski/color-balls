@@ -1,0 +1,27 @@
+.color0gray {
+    filter: invert(0%) sepia(0%) saturate(7469%) hue-rotate(217deg) brightness(96%) contrast(108%)
+}
+
+.color1gray {
+    filter: invert(0%) sepia(2%) saturate(2702%) hue-rotate(327deg) brightness(98%) contrast(73%);
+}
+
+.color2gray {
+    filter: invert(24%) sepia(0%) saturate(0%) hue-rotate(183deg) brightness(98%) contrast(89%);
+}
+
+.color3gray {
+    filter: invert(43%) sepia(3%) saturate(0%) hue-rotate(142deg) brightness(86%) contrast(77%);
+}
+
+.color4gray {
+    filter: invert(59%) sepia(0%) saturate(676%) hue-rotate(242deg) brightness(91%) contrast(82%);
+}
+
+.color5gray {
+    filter: invert(89%) sepia(0%) saturate(1247%) hue-rotate(142deg) brightness(77%) contrast(88%);
+}
+
+.color6gray {
+    filter: invert(98%) sepia(8%) saturate(0%) hue-rotate(153deg) brightness(81%) contrast(98%);
+}

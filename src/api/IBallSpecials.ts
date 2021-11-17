@@ -4,6 +4,6 @@
  * Because otherwise it's useless.
  */
 export default interface IBallSpecials {
-    grayscale: boolean
-    animatable: boolean
+    readonly grayscale: boolean
+    readonly animatable: boolean
 }

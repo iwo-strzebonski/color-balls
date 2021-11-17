@@ -1,0 +1,63 @@
+.rainbow:hover {
+    animation: rainbow 2s infinite;
+}
+
+@keyframes rainbow {
+    0% {
+        filter: invert(19%) sepia(79%) saturate(7467%) hue-rotate(359deg) brightness(91%) contrast(122%);
+    }
+
+    10% {
+        filter: invert(61%) sepia(50%) saturate(4678%) hue-rotate(359deg) brightness(101%) contrast(106%);
+    }
+
+    20% {
+        filter: invert(100%) sepia(84%) saturate(7361%) hue-rotate(353deg) brightness(108%) contrast(107%);
+    }
+
+    30% {
+        filter: invert(76%) sepia(95%) saturate(2228%) hue-rotate(38deg) brightness(106%) contrast(107%);
+    }
+
+    40% {
+        filter: invert(59%) sepia(85%) saturate(3098%) hue-rotate(81deg) brightness(120%) contrast(125%);
+    }
+
+    50% {
+        filter: invert(67%) sepia(85%) saturate(1019%) hue-rotate(92deg) brightness(104%) contrast(104%);
+    }
+
+    60% {
+        filter: invert(89%) sepia(100%) saturate(5191%) hue-rotate(102deg) brightness(102%) contrast(101%);
+    }
+
+    70% {
+        filter: invert(43%) sepia(94%) saturate(4657%) hue-rotate(197deg) brightness(103%) contrast(105%);
+    }
+
+    80% {
+        filter: invert(7%) sepia(98%) saturate(7444%) hue-rotate(247deg) brightness(111%) contrast(143%);
+    }
+
+    90% {
+        filter: invert(8%) sepia(100%) saturate(7311%) hue-rotate(272deg) brightness(113%) contrast(120%);
+    }
+
+    100% {
+        filter: invert(16%) sepia(93%) saturate(6312%) hue-rotate(324deg) brightness(103%) contrast(107%);
+    }
+}
+
+@keyframes _rainbow {
+    0%   { background-color: #ff0000; }
+    10%  { background-color: #ff8000; }
+    20%  { background-color: #ffff00; }
+    30%  { background-color: #80ff00; }
+    40%  { background-color: #00ff00; }
+    50%  { background-color: #00ff80; }
+    60%  { background-color: #00ffff; }
+    70%  { background-color: #0080ff; }
+    80%  { background-color: #0000ff; }
+    90%  { background-color: #8000ff; }
+    100% { background-color: #ff0080; }
+}

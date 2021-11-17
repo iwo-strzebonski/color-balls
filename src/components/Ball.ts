@@ -32,12 +32,11 @@ function Animatable(animatable: boolean) {
 @Animatable((new Globals).animatable)
 export default class Ball {
     private td: HTMLTableCellElement
-    private grayscale = false
-    private animatable = false
+    private readonly grayscale = false
+    private readonly animatable = false
 
     constructor(td: HTMLTableCellElement) {
         this.td = td
-        console.log(this.grayscale, this.animatable)
     }
 
     /**
@@ -45,7 +44,7 @@ export default class Ball {
      */
     public create(): void {
         this.td.className =
-            `circle color${Globals.randomBetween(0, 6)}${this.grayscale ? 'gray' : ''}${this.animatable ? ' rainbow' : ''}`
+            `circle color${Globals.randomBetween({min: 0, max: 6})}${this.grayscale ? 'gray' : ''}${this.animatable ? ' rainbow' : ''}`
         this.td.innerText = 'c'
     }
 }

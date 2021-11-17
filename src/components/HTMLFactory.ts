@@ -1,6 +1,7 @@
 import Globals from './Globals'
-import { ligma, arrOfArrs, deez } from '../@types/ballz'
+import { ligma, deez } from '../@types/ballz'
 import BallGenerator from './BallGenerator'
+import IArrOfArrs from '../api/IArrOfArrs'
 
 
 /**
@@ -59,7 +60,7 @@ export default class HTMLFactory extends BallGenerator {
             let src: ligma = Globals.source
             let trg: ligma = Globals.target
 
-            let tabA: arrOfArrs = []
+            let tabA: IArrOfArrs = []
 
             for (let y = 0; y < this.h; y++) { tabA.push([]) }
             for (let y = 0; y < this.h; y++) { for (let x = 0; x < this.w; x++) { tabA[x].push('') } }
@@ -97,8 +98,8 @@ export default class HTMLFactory extends BallGenerator {
             }
 
             let c = 1
-            let flag: Boolean = true
-            let found: Boolean = false
+            let flag: boolean = true
+            let found: boolean = false
 
             while (flag) {
                 let list: string[] = []

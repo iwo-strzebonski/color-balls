@@ -14,7 +14,10 @@ export default class BallGenerator {
      * @param td {HTMLTableCellElement} - table cell to modify
      */
     protected generateBalls(td: HTMLTableCellElement): void {
-        const random = Globals.randomBetween(0, this.field - 1)
+        const random = Globals.randomBetween({
+            min: 0, max: this.field - 1
+        })
+
         if (random < this.toGenerate) {
             const ball = new Ball(td)
             ball.create()

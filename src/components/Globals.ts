@@ -1,5 +1,7 @@
 import { ligma } from '../@types/ballz'
 import IBallSpecials from '../api/IBallSpecials'
+import RandomBetween from '../api/IRandomBetween'
+
 
 /**
  * Everything which should be available in every context.
@@ -15,8 +17,8 @@ export default class Globals implements IBallSpecials {
     static readonly height = 9
     static readonly startingBalls = 3
 
-    grayscale = false
-    animatable = false
+    readonly grayscale = false
+    readonly animatable = true
 
     /** 
      * Generate a random number in range (inclusive).
@@ -24,7 +26,7 @@ export default class Globals implements IBallSpecials {
      * @param {number} max - higher range
      * @returns {number} Pseudo-random integer.
      */
-    static randomBetween(min: number, max: number): number {
-        return Math.floor(Math.random() * (max - min + 1) + min)
+    static randomBetween(nums: RandomBetween): number {
+        return Math.floor(Math.random() * (nums.max - nums.min + 1) + nums.min)
     }
 }

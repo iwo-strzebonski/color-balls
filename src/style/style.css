@@ -1,0 +1,52 @@
+html,
+body {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    user-select: none;
+}
+
+* {
+    color: transparent;
+}
+
+td {
+    width: 2rem;
+    height: 2rem;
+    border: 1px dotted black;
+    text-align: center;
+    text-overflow: clip;
+}
+
+table {
+    top: 2rem;
+    left: 2rem;
+    padding: 6px;
+    position: relative;
+    border: 1px solid black;
+    background-color: aliceblue;
+}
+
+table:before {
+    content: ' ';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    border: 1px solid black;
+}
+
+.circle {
+    background-image: url('../img/ball.png');
+    background-size: contain;
+}
+
+.wall {
+    background-color: brown;
+}
+
+.path {
+    background-color: wheat;
+}
