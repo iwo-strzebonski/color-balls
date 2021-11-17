@@ -1,1 +1,3 @@
-color-balls
+# Color Balls
+
+Generating docs: `npx typedoc --entryPointStrategy expand ./src`
