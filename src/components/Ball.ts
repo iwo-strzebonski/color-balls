@@ -44,7 +44,7 @@ export default class Ball {
      */
     public create(): void {
         this.td.className =
-            `circle color${Globals.randomBetween({min: 0, max: 6})}${this.grayscale ? 'gray' : ''}${this.animatable ? ' rainbow' : ''}`
+            `circle color${Globals.randomBetween({min: 0, max: 6})}${this.grayscale ? 'gray' : ''}`
         this.td.innerText = 'c'
     }
 }

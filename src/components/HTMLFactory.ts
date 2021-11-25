@@ -3,6 +3,7 @@ import { ligma, deez } from '../@types/ballz'
 import BallGenerator from './BallGenerator'
 import IArrOfArrs from '../api/IArrOfArrs'
 
+const globals = new Globals()
 
 /**
  * Used to render the map and the balls
@@ -33,6 +34,10 @@ export default class HTMLFactory extends BallGenerator {
             if (cell.className === 'path') {
                 cell.className = ''
             }
+
+            if (globals.animatable && cell.innerText === 'c' && cell.className.includes('rainbow')) {
+                cell.classList.toggle('rainbow')
+            }
         }
 
         if (!Globals.pressed && td.innerText === '') {
@@ -45,14 +50,22 @@ export default class HTMLFactory extends BallGenerator {
             Globals.source.x = td.cellIndex
             Globals.source.y = tr.rowIndex
             Globals.pressed++
+            if (globals.animatable) td.classList.toggle('rainbow')
         } else if (Globals.pressed === 1) {
             if (!td.innerText) {
                 Globals.target.x = td.cellIndex
                 Globals.target.y = tr.rowIndex
                 Globals.pressed++
             } else if (td.innerText === 'c') {
-                Globals.source.x = td.cellIndex
-                Globals.source.y = tr.rowIndex
+                if (td.cellIndex === Globals.source.x && tr.rowIndex === Globals.source.y) {
+                    Globals.source.x = null
+                    Globals.source.y = null
+                    Globals.pressed--
+                } else {
+                    Globals.source.x = td.cellIndex
+                    Globals.source.y = tr.rowIndex
+                    td.classList.toggle('rainbow')
+                }
             }
         }
 

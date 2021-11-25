@@ -29,6 +29,7 @@ table {
 }
 
 table:before {
+    z-index: -1;
     content: ' ';
     position: absolute;
     top: 3px;
