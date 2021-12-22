@@ -1,17 +1,26 @@
 {
-  "name": "kulki",
+  "name": "color-balls",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "webpack && webpack serve --open",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack",
+    "lint": "eslint src/**",
+    "prettier": "prettier src/** --write && eslint src/** --fix"
   },
-  "author": "hoxton",
-  "license": "ISC",
+  "author": "iwo-strzebonski",
+  "license": "WTFPL",
   "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/parser": "^5.8.0",
     "css-loader": "^6.3.0",
+    "eslint": "^8.5.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1",
+    "prettier-eslint-cli": "^5.0.1",
     "style-loader": "^3.3.0",
     "webpack-dev-server": "^4.3.0"
   },

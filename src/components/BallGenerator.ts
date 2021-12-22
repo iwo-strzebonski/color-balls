@@ -14,17 +14,26 @@ export default class BallGenerator {
      * @param td {HTMLTableCellElement} - table cell to modify
      */
     protected generateBalls(td: HTMLTableCellElement): void {
+        const preview = <HTMLTableElement>document.getElementById('preview')
         const random = Globals.randomBetween({
-            min: 0, max: this.field - 1
+            min: 0,
+            max: this.field - 1
         })
 
         if (random < this.toGenerate) {
-            const ball = new Ball(td)
-            ball.create()
+            const ball = preview.rows[0].cells[3 - this.toGenerate]
+            td.className = ball.className
+            td.innerText = ball.innerText
+            this.generatePreview(preview.rows[0].cells[3 - this.toGenerate])
 
             this.toGenerate--
         }
 
         this.field--
+    }
+
+    protected generatePreview(td: HTMLTableCellElement): void {
+        const ball = new Ball(td)
+        ball.create()
     }
 }

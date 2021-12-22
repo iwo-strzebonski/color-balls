@@ -1,9 +1,10 @@
 import Globals from './Globals'
-import { ligma, deez } from '../@types/ballz'
-import BallGenerator from './BallGenerator'
-import IArrOfArrs from '../api/IArrOfArrs'
 
-const globals = new Globals()
+import BallGenerator from './BallGenerator'
+import toggleTd from '../functions/toggleTd'
+import initTds from '../functions/initTds'
+
+import PathFinder from '../core/PathFinder'
 
 /**
  * Used to render the map and the balls
@@ -12,6 +13,7 @@ const globals = new Globals()
 export default class HTMLFactory extends BallGenerator {
     private w: number
     private h: number
+    private pathFinder: PathFinder
 
     constructor(width: number, height: number, startingBalls: number) {
         super()
@@ -19,6 +21,27 @@ export default class HTMLFactory extends BallGenerator {
         this.h = height
         this.field = width * height
         this.toGenerate = startingBalls
+
+        this.pathFinder = new PathFinder(width, height)
+    }
+
+    private tdHover(e: Event): void {
+        const table = <HTMLTableElement>document.getElementById('table')
+        const td = <HTMLTableCellElement>e.target
+        const tr = <HTMLTableRowElement>td.parentElement
+
+        if (Globals.pressed === 1) {
+            initTds()
+            toggleTd(tr, td, false)
+
+            if (td.innerText) {
+                return
+            }
+
+            td.classList.add('path')
+
+            this.pathFinder.main(table)
+        }
     }
 
     /**
@@ -27,262 +50,40 @@ export default class HTMLFactory extends BallGenerator {
      */
     private tdPressed(e: Event): void {
         const table = <HTMLTableElement>document.getElementById('table')
-        let td: HTMLTableCellElement = <HTMLTableCellElement>e.target
-        let tr: HTMLTableRowElement = <HTMLTableRowElement>td.parentElement
+        const td = <HTMLTableCellElement>e.target
+        const tr = <HTMLTableRowElement>td.parentElement
 
-        for (const cell of document.getElementsByTagName('td')) {
-            if (cell.className === 'path') {
-                cell.className = ''
-            }
-
-            if (globals.animatable && cell.innerText === 'c' && cell.className.includes('rainbow')) {
-                cell.classList.toggle('rainbow')
-            }
-        }
-
-        if (!Globals.pressed && td.innerText === '') {
-            td.innerText = 'w'
-            td.className = 'wall'
-        } else if (!Globals.pressed && td.innerText === 'w') {
-            td.innerText = ''
-            td.className = ''
-        } else if (!Globals.pressed && td.innerText === 'c') {
-            Globals.source.x = td.cellIndex
-            Globals.source.y = tr.rowIndex
-            Globals.pressed++
-            if (globals.animatable) td.classList.toggle('rainbow')
-        } else if (Globals.pressed === 1) {
-            if (!td.innerText) {
-                Globals.target.x = td.cellIndex
-                Globals.target.y = tr.rowIndex
-                Globals.pressed++
-            } else if (td.innerText === 'c') {
-                if (td.cellIndex === Globals.source.x && tr.rowIndex === Globals.source.y) {
-                    Globals.source.x = null
-                    Globals.source.y = null
-                    Globals.pressed--
-                } else {
-                    Globals.source.x = td.cellIndex
-                    Globals.source.y = tr.rowIndex
-                    td.classList.toggle('rainbow')
-                }
-            }
-        }
+        initTds()
+        toggleTd(tr, td, true)
 
         if (Globals.pressed === 2) {
-            let src: ligma = Globals.source
-            let trg: ligma = Globals.target
+            this.pathFinder.main(table)
 
-            let tabA: IArrOfArrs = []
+            if (Globals.shouldGenerateNew) {
+                this.field = this.w * this.h
+                this.toGenerate = 3
 
-            for (let y = 0; y < this.h; y++) { tabA.push([]) }
-            for (let y = 0; y < this.h; y++) { for (let x = 0; x < this.w; x++) { tabA[x].push('') } }
-
-            for (const row of table.rows) {
-                for (const cell of row.cells) {
-                    const contains: 
-                    | string
-                    | number =
-                        !table.rows[row.rowIndex].cells[cell.cellIndex].innerText
-                            ? 0
-                            : table.rows[row.rowIndex].cells[cell.cellIndex].innerText
-
-                    tabA[row.rowIndex][cell.cellIndex] = contains
-                }
-            }
-
-            tabA[src.y!][src.x!] = 's'
-            tabA[trg.y!][trg.x!] = 'm'
-
-            let posList: ligma[] = [
-                {x: src.x, y: src.y! - 1},
-                {x: src.x, y: src.y! + 1},
-                {x: src.x! - 1, y: src.y},
-                {x: src.x! + 1, y: src.y}
-            ]
-
-            for (const pos of posList) {
                 if (
-                    table.rows[pos.y!] && table.rows[pos.y!].cells[pos.x!] &&
-                    !table.rows[pos.y!].cells[pos.x!].innerText
+                    document.getElementsByClassName('circle').length >=
+                    this.field - this.toGenerate
                 ) {
-                    tabA[pos.y!][pos.x!] = 1
+                    alert(`You lost!\nScore${Globals.score}`)
+                    location.reload()
+                    return
                 }
-            }
 
-            let c = 1
-            let flag: boolean = true
-            let found: boolean = false
-
-            while (flag) {
-                let list: string[] = []
-
-                for (let y = 0; y < this.h; y++) {
-                    for (let x = 0; x < this.w; x++) {
-                        if (tabA[y][x] === c) {
-                            if (
-                                (y - 1 >= 0 && y - 1 < this.h) &&
-                                (x >= 0 && x < this.w) &&
-                                !list.some(a => a == (y - 1) + '_' + x)
-                            ) { list.push((y - 1) + '_' + x) }
-                            if (
-                                (y + 1 >= 0 && y + 1 < this.h) &&
-                                (x >= 0 && x < this.w) &&
-                                !list.some(a => a == (y + 1) + '_' + x)
-                            ) { list.push((y + 1) + '_' + x) }
-                            if (
-                                (y >= 0 && y < this.h) &&
-                                (x - 1 >= 0 && x - 1 < this.w) &&
-                                !list.some(a => a == y + '_' + (x - 1))
-                            ) { list.push(y + '_' + (x - 1)) }
-                            if (
-                                (y >= 0 && y < this.h) &&
-                                (x + 1 >= 0 && x + 1 < this.w) &&
-                                !list.some(a => a == y + '_' + (x + 1))
-                            ) { list.push(y + '_' + (x + 1)) }
+                for (const row of table.rows) {
+                    for (const cell of row.cells) {
+                        if (!cell.innerText) {
+                            this.generateBalls(cell)
+                        } else {
+                            this.field--
                         }
                     }
                 }
 
-                if (c > 81) {
-                    flag = false
-                    break
-                }
-
-                list.forEach(pos => {
-                    if (parseInt(pos.split('_')[0]) >= 0 && parseInt(pos.split('_')[1]) >= 0) {
-                        const y: number = parseInt(pos.split('_')[0])
-                        const x: number = parseInt(pos.split('_')[1])
-                        if ((tabA[y][x] === 'm')) {
-                            flag = false
-                            found = true
-                        } else if (!tabA[y][x]) {
-                            tabA[y][x] = c + 1
-                        }
-                    }
-                })
-
-                list = []
-                c++
+                Globals.shouldGenerateNew = false
             }
-
-            tabA.forEach((tab, y) => {
-                tab.forEach((el, x) => {
-                    if (!table.rows[y].cells[x].innerText) {
-                        table.rows[y].cells[x].innerText = el.toString()
-                    }
-                })
-            })
-
-            let point: ligma = trg
-
-            c = 0
-            while (found) {
-                c++
-                const arr: deez[] = []
-                let x: number = point.x!
-                let y: number = point.y!
-
-                y--
-
-                if (
-                    table.rows[y] && table.rows[y].cells[x] &&
-                    table.rows[y].cells[x].innerText.match('[0-9]') &&
-                    (y >= 0 && y - 1 < this.h) &&
-                    (x >= 0 && x < this.w)
-                ) {
-                    arr.push({
-                        y: y,
-                        x: x,
-                        num: parseInt(table.rows[y].cells[x].innerText)
-                    })
-                }
-
-                y += 2
-
-                if (
-                    table.rows[y] && table.rows[y].cells[x] &&
-                    table.rows[y].cells[x].innerText.match('[0-9]') &&
-                    (y >= 0 && y - 1 < this.h) &&
-                    (x >= 0 && x < this.w)
-                ) {
-                    arr.push({
-                        y: y,
-                        x: x,
-                        num: parseInt(table.rows[y].cells[x].innerText)
-                    })
-                }
-
-                x--
-                y--
-
-                if (
-                    table.rows[y] && table.rows[y].cells[x] &&
-                    table.rows[y].cells[x].innerText.match('[0-9]') &&
-                    (y >= 0 && y - 1 < this.h) &&
-                    (x >= 0 && x < this.w)
-                ) {
-                    arr.push({
-                        y: y,
-                        x: x,
-                        num: parseInt(table.rows[y].cells[x].innerText)
-                    })
-                }
-
-                x += 2
-
-                if (
-                    table.rows[y] && table.rows[y].cells[x] &&
-                    table.rows[y].cells[x].innerText.match('[0-9]') &&
-                    (y >= 0 && y - 1 < this.h) &&
-                    (x >= 0 && x < this.w)
-                ) {
-                    arr.push({
-                        y: y,
-                        x: x,
-                        num: parseInt(table.rows[y].cells[x].innerText)
-                    })
-                }
-
-                let min: deez = { x: 0, y: 0, num: 50 }
-
-                for (const pos of arr) {
-                    if (pos.num > 0) {
-                        min = (min.num < pos.num) ? min : pos
-                    }
-                }
-
-                table.rows[min.y!].cells[min.x!].className = 'path'
-
-                point = min
-                if (min.num == 1 || c > 50) { break }
-            }
-
-            if (found) {
-                const sourceCell = table.rows[Globals.source.y!].cells[Globals.source.x!]
-                const targetCell = table.rows[Globals.target.y!].cells[Globals.target.x!]
-
-                targetCell.innerText = 'c'
-                targetCell.className = sourceCell.className
-                sourceCell.innerText = ''
-                sourceCell.className = 'path'
-            }
-
-            for (const row of table.rows) {
-                for (const cell of row.cells) {
-                    if (
-                        cell.innerText.match('[0-9]') ||
-                        cell.innerText === 'm'
-                    ) { cell.innerText = '' }
-                }
-            }
-
-            Globals.source.x = null
-            Globals.source.y = null
-            Globals.target.x = null
-            Globals.target.y = null
-
-            Globals.pressed = 0
         }
     }
 
@@ -291,9 +92,10 @@ export default class HTMLFactory extends BallGenerator {
      * @returns {HTMLTableCellElement} Created table cell element.
      */
     private createElementTD(): HTMLTableCellElement {
-        let td: HTMLTableCellElement = document.createElement('td')
+        const td: HTMLTableCellElement = document.createElement('td')
 
         td.addEventListener('click', this.tdPressed.bind(this))
+        td.addEventListener('mouseover', this.tdHover.bind(this))
 
         this.generateBalls(td)
 
@@ -305,10 +107,10 @@ export default class HTMLFactory extends BallGenerator {
      * @returns {HTMLTableRowElement} Created table row element.
      */
     private createElementTR(yParam: number): HTMLTableRowElement {
-        let tr: HTMLTableRowElement = document.createElement('tr')
+        const tr: HTMLTableRowElement = document.createElement('tr')
 
         for (let x = 0; x < this.w; x++) {
-            let td: HTMLTableCellElement = this.createElementTD()
+            const td: HTMLTableCellElement = this.createElementTD()
             td.id = yParam + '_' + x
             tr.appendChild(td)
         }
@@ -321,7 +123,7 @@ export default class HTMLFactory extends BallGenerator {
      * @returns {HTMLTableElement} Created table element.
      */
     private createElementTable(): HTMLTableElement {
-        let table: HTMLTableElement = document.createElement('table')
+        const table: HTMLTableElement = document.createElement('table')
         table.id = 'table'
 
         for (let y = 0; y < this.h; y++) {
@@ -331,10 +133,28 @@ export default class HTMLFactory extends BallGenerator {
         return table
     }
 
+    private createPreviewTable(): HTMLTableElement {
+        const preview: HTMLTableElement = document.createElement('table')
+        const tr: HTMLTableRowElement = document.createElement('tr')
+
+        for (let b = 0; b < 3; b++) {
+            const td: HTMLTableCellElement = document.createElement('td')
+            td.id = `ball_${b}`
+            this.generatePreview(td)
+            tr.append(td)
+        }
+
+        preview.id = 'preview'
+        preview.append(tr)
+
+        return preview
+    }
+
     /**
      * Renders the table.
      */
     public render(): void {
+        document.body.appendChild(this.createPreviewTable())
         document.body.appendChild(this.createElementTable())
     }
 }

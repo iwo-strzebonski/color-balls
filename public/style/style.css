@@ -7,8 +7,9 @@ body {
     user-select: none;
 }
 
-* {
-    color: transparent;
+span {
+    margin-left: 3rem;
+    font-size: 3rem;
 }
 
 td {
@@ -20,7 +21,6 @@ td {
 }
 
 table {
-    top: 2rem;
     left: 2rem;
     padding: 6px;
     position: relative;

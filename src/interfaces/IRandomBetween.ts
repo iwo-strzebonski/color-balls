@@ -1,4 +1,4 @@
 export default interface IRandomBetween {
-    min: number,
+    min: number
     max: number
 }

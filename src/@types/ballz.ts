@@ -1,7 +1,7 @@
 /**
  * Point type
  */
-export type ligma = { x: number | null, y: number | null }
+export type ligma = { x: number; y: number }
 
 /**
  * Cell data type used for pathfinding

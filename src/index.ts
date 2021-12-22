@@ -1,16 +1,18 @@
 import HTMLFactory from './components/HTMLFactory'
 import Globals from './components/Globals'
-import './style/style.css'
-import './style/colors.css'
-import './style/grayscale.css'
-import './style/rainbow.css'
+import '/public/style/style.css'
+import '/public/style/colors.css'
+import '/public/style/grayscale.css'
+import '/public/style/rainbow.css'
 
 /**
- * Yes, I even decided to add JSDocs for this constant.
+ * Yes, I decided to add JSDocs even for this constant.
  * @constant {HTMLFactory}
  */
 const htmlFactory = new HTMLFactory(
-    Globals.width, Globals.height, Globals.startingBalls
+    Globals.width,
+    Globals.height,
+    Globals.startingBalls
 )
 
 htmlFactory.render()
